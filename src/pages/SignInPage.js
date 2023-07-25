@@ -92,6 +92,7 @@ const SignInPage = () => {
         <Button
           type="submit"
           style={{
+            width: "100%",
             maxWidth: 300,
             margin: "0 auto",
           }}
