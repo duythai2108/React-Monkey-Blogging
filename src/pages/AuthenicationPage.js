@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 const AuthenicationPageStyles = styled.div`
@@ -19,12 +20,22 @@ const AuthenicationPageStyles = styled.div`
     max-width: 600px;
     margin: 0 auto;
   }
+  .have-account {
+    margin-bottom: 20px;
+    a {
+      display: inline-block;
+      color: ${(props) => props.theme.primary};
+      font-weight: 500;
+    }
+  }
 `;
 const AuthenicationPage = ({ children }) => {
   return (
     <AuthenicationPageStyles>
       <div className="container">
-        <img className="logo" srcSet="/logo.png 2x" alt="monkey-blogging" />
+        <NavLink to="/">
+          <img className="logo" srcSet="/logo.png 2x" alt="monkey-blogging" />
+        </NavLink>
         <h1 className="heading">Monkey Blogging</h1>
         {children}
       </div>

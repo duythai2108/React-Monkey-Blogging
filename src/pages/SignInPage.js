@@ -1,6 +1,6 @@
 import { useAuth } from "contexts/auth-context";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import AuthenicationPage from "./AuthenicationPage";
 import { Button } from "components/button";
 
@@ -44,10 +44,10 @@ const SignInPage = () => {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
-    if (!userInfo.email) navigate("/sign-up");
-    else navigate("/");
+    document.title = "Login Page";
+    if (userInfo?.email) navigate("/");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userInfo]);
   const handleSignIn = async (values) => {
     if (!isValid) return;
     await signInWithEmailAndPassword(auth, values.email, values.password);
@@ -86,6 +86,9 @@ const SignInPage = () => {
             )}
           </Input>
         </Field>
+        <div className="have-account">
+          Don't have an account? <NavLink to={"/sign-up"}>Sign-up</NavLink>
+        </div>
         <Button
           type="submit"
           style={{

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { Input } from "components/input";
 import { useForm } from "react-hook-form";
 import { Label } from "components/label";
@@ -11,7 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "firebase-app/firebase-config";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
 import AuthenicationPage from "./AuthenicationPage";
 
@@ -61,6 +60,9 @@ const SignUpPage = () => {
       toast.error(arrError[0]?.message, { pauseOnHover: false, delay: 0 });
     }
   }, [errors]);
+  useEffect(() => {
+    document.title = "Register Page";
+  }, []);
   return (
     <AuthenicationPage>
       <form className="form" onSubmit={handleSubmit(handleSignUp)}>
@@ -101,6 +103,9 @@ const SignUpPage = () => {
             )}
           </Input>
         </Field>
+        <div className="have-account">
+          You already have an account? <NavLink to={"/sign-in"}>Login</NavLink>
+        </div>
         <Button
           type="submit"
           style={{
