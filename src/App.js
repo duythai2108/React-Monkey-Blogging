@@ -32,11 +32,11 @@ function App() {
               path="/manage/post"
               element={<PostManage></PostManage>}
             ></Route>
+            <Route
+              path="/manage/add-post"
+              element={<PostAddNew></PostAddNew>}
+            ></Route>
           </Route>
-          <Route
-            path="/manage/add-post"
-            element={<PostAddNew></PostAddNew>}
-          ></Route>
         </Routes>
       </AuthProvider>
     </div>
