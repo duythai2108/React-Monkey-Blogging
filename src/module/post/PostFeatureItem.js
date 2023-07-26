@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
+import PostMeta from "./PostMeta";
 const PostFeatureItemStyles = styled.div`
   width: 100%;
   border-radius: 16px;
@@ -49,13 +50,6 @@ const PostFeatureItemStyles = styled.div`
       color: white;
       margin-left: auto;
     }
-    &-dot {
-      display: inline-block;
-      width: 4px;
-      height: 4px;
-      background-color: currentColor;
-      border-radius: 100rem;
-    }
     &-title {
     }
   }
@@ -75,11 +69,7 @@ const PostFeatureItem = () => {
       <div className="post-content">
         <div className="post-top">
           <PostCategory>Kiến thức</PostCategory>
-          <div className="post-info">
-            <span className="post-time">Mar 23</span>
-            <span className="post-dot"></span>
-            <span className="post-author">Andiez Le</span>
-          </div>
+          <PostMeta></PostMeta>
         </div>
         <PostTitle size="big">
           Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
