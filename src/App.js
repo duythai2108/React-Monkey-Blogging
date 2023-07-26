@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import PostAddNew from "module/post/PostAddNew";
 import { AuthProvider } from "./contexts/auth-context";
 import DashboardLayout from "module/dashboard/DashboardLayout";
 import SignUpPage from "./pages/SignUpPage";
@@ -32,6 +33,10 @@ function App() {
               element={<PostManage></PostManage>}
             ></Route>
           </Route>
+          <Route
+            path="/manage/add-post"
+            element={<PostAddNew></PostAddNew>}
+          ></Route>
         </Routes>
       </AuthProvider>
     </div>
