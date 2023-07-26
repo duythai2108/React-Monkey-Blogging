@@ -1,10 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/auth-context";
+import DashboardLayout from "module/dashboard/DashboardLayout";
 import SignUpPage from "./pages/SignUpPage";
 import PostDetailsPage from "pages/PostDetailsPage";
 import SignInPage from "pages/SignInPage";
 import HomePage from "pages/HomePage";
 import NoFoundPage from "pages/NoFoundPage";
+import DashboardPage from "pages/DashboardPage";
+
 
 function App() {
   return (
@@ -19,6 +22,12 @@ function App() {
             path="/:slug"
             element={<PostDetailsPage></PostDetailsPage>}
           ></Route>
+          <Route element={<DashboardLayout></DashboardLayout>}>
+            <Route
+              path="/dashboard"
+              element={<DashboardPage></DashboardPage>}
+            ></Route>
+          </Route>
         </Routes>
       </AuthProvider>
     </div>
