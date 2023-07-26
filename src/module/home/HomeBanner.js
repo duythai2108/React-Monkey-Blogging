@@ -29,6 +29,28 @@ const HomeBannerStyles = styled.div`
       font-weight: 400;
     }
   }
+  @media screen and (max-width: 1023.98px) {
+    .banner {
+      flex-direction: column;
+      min-height: unset;
+      &-heading {
+        font-size: 30px;
+        margin-bottom: 10px;
+      }
+      &-desc {
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+      &-image {
+        margin-top: 25px;
+      }
+      &-button {
+        font-size: 14px;
+        height: auto;
+        padding: 15px;
+      }
+    }
+  }
 `;
 const HomeBanner = () => {
   return (
@@ -43,8 +65,7 @@ const HomeBanner = () => {
               distinctio autem tempora dignissimos esse enim minus, repellat in,
               voluptas mollitia dicta quidem.
             </p>
-            <Button kind="secondary" to="/sign-up">
-              {" "}
+            <Button kind="secondary" className="banner-button" to="/sign-up">
               Get started
             </Button>
           </div>
