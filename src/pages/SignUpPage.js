@@ -15,6 +15,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import AuthenicationPage from "./AuthenicationPage";
 import InputPasswordToggle from "components/input/InputPasswordToggle";
+import slugify from "slugify";
 
 const schema = yup.object({
   fullname: yup.string().required("Please enter your fullname"),
@@ -51,6 +52,7 @@ const SignUpPage = () => {
       fullname: values.fullname,
       email: values.email,
       password: values.password,
+      username: slugify(values.fullname, { lower: true }),
     });
     // await addDoc(colRef, {
     //   fullname: values.fullname,
