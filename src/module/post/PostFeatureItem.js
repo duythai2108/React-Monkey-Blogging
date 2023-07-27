@@ -6,6 +6,7 @@ import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "firebase-app/firebase-config";
+import slugify from "slugify";
 const PostFeatureItemStyles = styled.div`
   width: 100%;
   border-radius: 16px;
@@ -80,19 +81,20 @@ const PostFeatureItem = ({ data }) => {
 
     fetch();
   }, [data.categoryId]);
+
   useEffect(() => {
     async function fetchUser() {
-      if (data.userID) {
+      if (data.userId) {
         const docRef = doc(db, "users", data.userId);
         const docSnap = await getDoc(docRef);
-        if (docSnap.data()) {
+        if (docSnap.data) {
           setUser(docSnap.data());
         }
-        // console.log("🚀 ~ fetchUser ~ docSnap.data():", docSnap.data())
       }
     }
     fetchUser();
   }, [data.userId]);
+
   if (!data || !data.id) return null;
   return (
     <PostFeatureItemStyles>
@@ -101,10 +103,17 @@ const PostFeatureItem = ({ data }) => {
       <div className="post-overlay"></div>
       <div className="post-content">
         <div className="post-top">
-          {category?.name && <PostCategory>{category.name}</PostCategory>}
-          <PostMeta authorName={user?.fullname}></PostMeta>
+          {category?.name && (
+            <PostCategory to={category.slug}>{category.name}</PostCategory>
+          )}
+          <PostMeta
+            to={slugify(user?.fullname || "", { lower: true })}
+            authorName={user?.fullname}
+          ></PostMeta>
         </div>
-        <PostTitle size="big">{data.title}</PostTitle>
+        <PostTitle to={data.slug} size="big">
+          {data.title}
+        </PostTitle>
       </div>
     </PostFeatureItemStyles>
   );
