@@ -16,19 +16,12 @@ const PostFeatureItemStyles = styled.div`
     &-image {
       width: 100%;
       height: 100%;
-      object-fit: cover;
       border-radius: 16px;
     }
     &-overlay {
       position: absolute;
       inset: 0;
       border-radius: 16px;
-      /* background: linear-gradient(
-        179.77deg,
-        #6b6b6b 36.45%,
-        rgba(163, 163, 163, 0.622265) 63.98%,
-        rgba(255, 255, 255, 0) 99.8%
-      ); */
       background-color: rgba(0, 0, 0, 0.75);
       mix-blend-mode: multiply;
       opacity: 0.6;
@@ -46,18 +39,8 @@ const PostFeatureItemStyles = styled.div`
       align-items: center;
       margin-bottom: 16px;
     }
-    &-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      color: white;
-      margin-left: auto;
-    }
-    &-title {
-    }
   }
+
   @media screen and (min-width: 1024px) {
     height: 272px;
   }
@@ -81,7 +64,6 @@ const PostFeatureItem = ({ data }) => {
 
     fetch();
   }, [data.categoryId]);
-
   useEffect(() => {
     async function fetchUser() {
       if (data.userId) {
@@ -94,7 +76,6 @@ const PostFeatureItem = ({ data }) => {
     }
     fetchUser();
   }, [data.userId]);
-
   if (!data || !data.id) return null;
   const date = data?.createdAt?.seconds
     ? new Date(data?.createdAt?.seconds * 1000)
@@ -102,8 +83,7 @@ const PostFeatureItem = ({ data }) => {
   const formatDate = new Date(date).toLocaleDateString("vi-VI");
   return (
     <PostFeatureItemStyles>
-      <PostImage url={data.image} alt="unplash"></PostImage>
-
+      <PostImage url={data.image} alt="unsplash"></PostImage>
       <div className="post-overlay"></div>
       <div className="post-content">
         <div className="post-top">

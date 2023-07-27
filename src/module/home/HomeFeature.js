@@ -13,7 +13,7 @@ import styled from "styled-components";
 const HomeFeatureStyles = styled.div``;
 
 const HomeFeature = () => {
-  const [post, setPost] = useState([]);
+  const [posts, setPosts] = useState([]);
   useEffect(() => {
     const colRef = collection(db, "posts");
     const queries = query(
@@ -30,16 +30,16 @@ const HomeFeature = () => {
           ...doc.data(),
         });
       });
-      setPost(results);
+      setPosts(results);
     });
   }, []);
-  if (post.length <= 0) return null;
+  if (posts.length <= 0) return null;
   return (
     <HomeFeatureStyles className="home-block">
       <div className="container">
-        <Heading>Bài viết nổi bật</Heading>
+        <Heading>Featured posts</Heading>
         <div className="grid-layout">
-          {post.map((post) => (
+          {posts.map((post) => (
             <PostFeatureItem key={post.id} data={post}></PostFeatureItem>
           ))}
         </div>

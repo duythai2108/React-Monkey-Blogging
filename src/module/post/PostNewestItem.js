@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import PostCategory from "./PostCategory";
-import PostTitle from "./PostTitle";
-import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
+import PostMeta from "./PostMeta";
+import PostTitle from "./PostTitle";
 const PostNewestItemStyles = styled.div`
   display: flex;
   align-items: center;
@@ -30,6 +30,7 @@ const PostNewestItemStyles = styled.div`
     &-content {
       flex: 1;
     }
+
     &-title {
       margin-bottom: 8px;
     }
@@ -55,11 +56,9 @@ const PostNewestItem = () => {
       ></PostImage>
 
       <div className="post-content">
-        <PostCategory type="secondary" className="post-category">
-          Kiến thức
-        </PostCategory>
+        <PostCategory type="secondary">Knowledge</PostCategory>
         <PostTitle>
-          Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
+          The complete guide to learn new languages for beginners
         </PostTitle>
         <PostMeta></PostMeta>
       </div>

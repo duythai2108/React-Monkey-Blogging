@@ -1,7 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-
 const PostMetaStyles = styled.div`
   display: flex;
   align-items: center;
@@ -23,6 +22,7 @@ const PostMetaStyles = styled.div`
     gap: 6px;
   }
 `;
+
 const PostMeta = ({
   date = "Mar 23",
   authorName = "Andiez Le",

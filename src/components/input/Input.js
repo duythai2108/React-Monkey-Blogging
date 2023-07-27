@@ -1,28 +1,27 @@
 import React from "react";
-import { useController } from "react-hook-form";
 import styled from "styled-components";
+import { useController } from "react-hook-form";
 
 const InputStyles = styled.div`
   position: relative;
   width: 100%;
   input {
     width: 100%;
-    padding: ${(props) => (props.hasIcon ? "20px 60px 20px 20px" : "20px")};
-    background-color: ${(props) => props.theme.grayLight};
+    padding: ${(props) =>
+      props.hasIcon ? "15px 60px 15px 25px" : "15px 25px"};
+    background-color: transparent;
+    border: 1px solid ${(props) => props.theme.grayf1};
     border-radius: 8px;
     font-weight: 500;
     transition: all 0.2s linear;
-    border: 1px solid transparent;
-  }
-  input:focus {
-    background-color: white;
-    border-color: ${(props) => props.theme.primary};
+    color: ${(props) => props.theme.black};
+    font-size: 14px;
   }
   input::-webkit-input-placeholder {
-    color: #b2b3bd;
+    color: #84878b;
   }
   input::-moz-input-placeholder {
-    color: #b2b3bd;
+    color: #84878b;
   }
   .input-icon {
     position: absolute;
@@ -32,6 +31,13 @@ const InputStyles = styled.div`
     cursor: pointer;
   }
 `;
+/**
+ *
+ * @param {*} placeholder(optional) - Placeholder of input
+ * @param {*} name(optional) - name of input
+ * @param {*} control - control from react hook form
+ * @returns Input
+ */
 const Input = ({ name = "", type = "text", children, control, ...props }) => {
   const { field } = useController({
     control,
@@ -40,7 +46,7 @@ const Input = ({ name = "", type = "text", children, control, ...props }) => {
   });
   return (
     <InputStyles hasIcon={children ? true : false}>
-      <input type={type} id={name} {...field} {...props} />
+      <input id={name} type={type} {...field} {...props} />
       {children ? <div className="input-icon">{children}</div> : null}
     </InputStyles>
   );

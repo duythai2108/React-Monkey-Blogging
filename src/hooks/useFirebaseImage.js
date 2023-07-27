@@ -45,26 +45,23 @@ export default function useFirebaseImage(setValue, getValues) {
   };
   const handleSelectImage = (e) => {
     const file = e.target.files[0];
-    console.log("🚀 ~ onSelectImage ~ file:", file);
     if (!file) return;
     setValue("image_name", file.name);
     handleUploadImage(file);
   };
+
   const handleDeleteImage = () => {
     const storage = getStorage();
-
     const imageRef = ref(storage, "images/" + getValues("image_name"));
-
     deleteObject(imageRef)
       .then(() => {
-        // toast.success("Delete image successfully");
-        console.log("Delete image success");
+        console.log("Remove image successfully");
         setImage("");
         setProgress(0);
       })
       .catch((error) => {
-        // toast.error("Can not delete image !");
-        console.log("Delete image error !");
+        console.log("handleDeleteImage ~ error", error);
+        console.log("Can not delete image");
       });
   };
   const handleResetUpload = () => {
@@ -73,9 +70,9 @@ export default function useFirebaseImage(setValue, getValues) {
   };
   return {
     image,
+    handleResetUpload,
     progress,
     handleSelectImage,
     handleDeleteImage,
-    handleResetUpload,
   };
 }

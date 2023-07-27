@@ -13,7 +13,7 @@ const HomeBannerStyles = styled.div`
   margin-bottom: 60px;
   .banner {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     &-content {
       max-width: 600px;
@@ -22,11 +22,11 @@ const HomeBannerStyles = styled.div`
     &-heading {
       font-size: 36px;
       margin-bottom: 20px;
+      font-weight: bold;
     }
     &-desc {
       line-height: 1.75;
       margin-bottom: 40px;
-      font-weight: 400;
     }
   }
   @media screen and (max-width: 1023.98px) {
@@ -52,6 +52,7 @@ const HomeBannerStyles = styled.div`
     }
   }
 `;
+
 const HomeBanner = () => {
   return (
     <HomeBannerStyles>
@@ -60,17 +61,17 @@ const HomeBanner = () => {
           <div className="banner-content">
             <h1 className="banner-heading">Monkey Blogging</h1>
             <p className="banner-desc">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil
-              odio quam, ratione voluptate sapiente quis. Nulla aliquid
-              distinctio autem tempora dignissimos esse enim minus, repellat in,
-              voluptas mollitia dicta quidem.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Laudantium magnam similique accusantium natus esse facilis!
+              Quaerat voluptates possimus dolorem officiis pariatur, repellat,
+              cupiditate porro, quidem molestiae impedit laudantium neque quo!
             </p>
-            <Button kind="secondary" className="banner-button" to="/sign-up">
+            <Button to="/sign-up" kind="secondary" className="banner-button">
               Get started
             </Button>
           </div>
           <div className="banner-image">
-            <img src="/img-banner.png" alt="" />
+            <img src="/img-banner.png" alt="banner" />
           </div>
         </div>
       </div>
