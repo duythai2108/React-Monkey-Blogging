@@ -17,7 +17,7 @@ import { categoryStatus } from "utils/constants";
 const CategoryUpdate = () => {
   const {
     control,
-    formState: { errors, isSubmitting, isValid },
+    formState: { isSubmitting },
     handleSubmit,
     watch,
     reset,
@@ -32,6 +32,7 @@ const CategoryUpdate = () => {
     async function fetchData() {
       const colRef = doc(db, "categories", categoryId);
       const singleDoc = await getDoc(colRef);
+      // ham reset de reset form lai ban dau, truyen vao data de show len form
       reset(singleDoc.data());
     }
     fetchData();

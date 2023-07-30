@@ -18,10 +18,10 @@ const InputStyles = styled.div`
     font-size: 14px;
   }
   input::-webkit-input-placeholder {
-    color: #84878b;
+    color: #b2b3bd;
   }
   input::-moz-input-placeholder {
-    color: #84878b;
+    color: #b2b3bd;
   }
   .input-icon {
     position: absolute;

@@ -7,20 +7,37 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
+  limit,
   onSnapshot,
+  query,
+  startAfter,
+  where,
 } from "firebase/firestore";
 import DashboardHeading from "module/dashboard/DashboardHeading";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { categoryStatus } from "utils/constants";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { Button } from "components/button";
+import { debounce } from "lodash";
+
+const CATEGORY_PER_PAGE = 10;
 
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = useState([]);
   const navigate = useNavigate();
-  useEffect(() => {
-    const colRef = collection(db, "categories");
-    onSnapshot(colRef, (snapshot) => {
+  const [filter, setFilter] = useState("");
+  const [lastDoc, setLastDoc] = useState();
+  const [total, setTotal] = useState(0);
+  const handleLoadMoreCategory = async () => {
+    const nextRef = query(
+      collection(db, "categories"),
+      startAfter(lastDoc || 0),
+      limit(CATEGORY_PER_PAGE)
+    );
+
+    onSnapshot(nextRef, (snapshot) => {
       let results = [];
       snapshot.forEach((doc) => {
         results.push({
@@ -28,9 +45,46 @@ const CategoryManage = () => {
           ...doc.data(),
         });
       });
-      setCategoryList(results);
+
+      setCategoryList([...categoryList, ...results]);
     });
-  }, []);
+    const documentSnapshots = await getDocs(nextRef);
+
+    const lastVisible =
+      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    setLastDoc(lastVisible);
+  };
+  useEffect(() => {
+    async function fetchData() {
+      const colRef = collection(db, "categories");
+      const newRef = filter
+        ? query(
+            colRef,
+            where("name", ">=", filter),
+            where("name", "<=", filter + "utf8")
+          )
+        : query(colRef, limit(CATEGORY_PER_PAGE));
+      const documentSnapshots = await getDocs(newRef);
+
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      onSnapshot(colRef, (snapshot) => {
+        setTotal(snapshot.size);
+      });
+      onSnapshot(newRef, (snapshot) => {
+        let results = [];
+        snapshot.forEach((doc) => {
+          results.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        setCategoryList(results);
+      });
+      setLastDoc(lastVisible);
+    }
+    fetchData();
+  }, [filter]);
   const handleDeleteCategory = async (docId) => {
     const colRef = doc(db, "categories", docId);
 
@@ -49,12 +103,24 @@ const CategoryManage = () => {
       }
     });
   };
+  const handleInputFilter = debounce((e) => {
+    setFilter(e.target.value);
+  }, 500);
   return (
     <div>
-      <DashboardHeading
-        title="Categories"
-        desc="Manage your category"
-      ></DashboardHeading>
+      <DashboardHeading title="Categories" desc="Manage your category">
+        <Button kind="ghost" height="60px" to="/manage/add-category">
+          Create category
+        </Button>
+      </DashboardHeading>
+      <div className="mb-10 flex justify-end">
+        <input
+          className="py-4 px-5 border border-gray-300 rounded-lg outline-none"
+          type="text"
+          placeholder="Search cateory..."
+          onChange={handleInputFilter}
+        />
+      </div>
       <Table>
         <thead>
           <tr>
@@ -97,6 +163,14 @@ const CategoryManage = () => {
             ))}
         </tbody>
       </Table>
+      {total > categoryList.length && (
+        <div className="mt-10">
+          <Button className="mx-auto" onClick={handleLoadMoreCategory}>
+            Loadmore
+          </Button>
+          {total}
+        </div>
+      )}
     </div>
   );
 };
