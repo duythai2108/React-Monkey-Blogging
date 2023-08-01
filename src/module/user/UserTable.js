@@ -2,9 +2,19 @@ import { ActionDelete, ActionEdit } from "components/action";
 import { LabelStatus } from "components/label";
 import { Table } from "components/table";
 import { db } from "firebase-app/firebase-config";
-import { collection, onSnapshot } from "firebase/firestore";
+import { deleteUser } from "firebase/auth";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 import { userRole, userStatus } from "utils/constants";
 
 const UserTable = () => {
@@ -50,6 +60,25 @@ const UserTable = () => {
         break;
     }
   };
+  const handleDeleteUser = async (user) => {
+    const colRef = doc(db, "users", user.id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteDoc(colRef);
+        // await deleteUser(user);
+        toast.success("Delete user successfully");
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  };
   const renderUserItem = (user) => (
     <tr key={user.id}>
       <td title={user.id}>{user.id.slice(0, 5) + "..."}</td>
@@ -79,9 +108,7 @@ const UserTable = () => {
           <ActionEdit
             onClick={() => navigate(`/manage/update-user?id=${user.id}`)}
           ></ActionEdit>
-          <ActionDelete
-          // onClick={() => handleDeleteCategory(category.id)}
-          ></ActionDelete>
+          <ActionDelete onClick={() => handleDeleteUser(user)}></ActionDelete>
         </div>
       </td>
     </tr>
