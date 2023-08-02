@@ -14,8 +14,10 @@ import {
   limit,
   onSnapshot,
   query,
+  startAfter,
   where,
 } from "firebase/firestore";
+import { debounce } from "lodash";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -23,12 +25,13 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { postStatus } from "utils/constants";
 
-const POST_PER_PAGE = 10;
+const POST_PER_PAGE = 1;
 
 const PostManage = () => {
   const [postList, setPostList] = useState([]);
   const [filter, setFilter] = useState("");
   const [lastDoc, setLastDoc] = useState();
+  const [total, setTotal] = useState(0);
   const navigate = useNavigate();
   useEffect(() => {
     async function fetchData() {
@@ -36,15 +39,17 @@ const PostManage = () => {
       const newRef = filter
         ? query(
             colRef,
-            where("name", ">=", filter),
-            where("name", "<=", filter + "utf8")
+            where("title", ">=", filter),
+            where("title", "<=", filter + "utf8")
           )
         : query(colRef, limit(POST_PER_PAGE));
       const documentSnapshots = await getDocs(newRef);
 
       const lastVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
-
+      onSnapshot(colRef, (snapshot) => {
+        setTotal(snapshot.size);
+      });
       onSnapshot(newRef, (snapshot) => {
         let results = [];
         snapshot.forEach((doc) => {
@@ -89,6 +94,33 @@ const PostManage = () => {
         break;
     }
   };
+  const handleSearchPost = debounce((e) => {
+    setFilter(e.target.value);
+  }, 250);
+  const handleLoadMorePost = async () => {
+    const nextRef = query(
+      collection(db, "posts"),
+      startAfter(lastDoc || 0),
+      limit(POST_PER_PAGE)
+    );
+
+    onSnapshot(nextRef, (snapshot) => {
+      let results = [];
+      snapshot.forEach((doc) => {
+        results.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+
+      setPostList([...postList, ...results]);
+    });
+    const documentSnapshots = await getDocs(nextRef);
+
+    const lastVisible =
+      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    setLastDoc(lastVisible);
+  };
   return (
     <div>
       <DashboardHeading
@@ -96,16 +128,17 @@ const PostManage = () => {
         desc="Manage all posts"
       ></DashboardHeading>
       <div className="mb-10 flex justify-end gap-5">
-        <div className="w-full max-w-[200px]">
+        {/* <div className="w-full max-w-[200px]">
           <Dropdown>
             <Dropdown.Select placeholder="Category"></Dropdown.Select>
           </Dropdown>
-        </div>
+        </div> */}
         <div className="w-full max-w-[300px]">
           <input
             type="text"
             className="w-full p-4 rounded-lg border border-solid border-gray-300"
             placeholder="Search post..."
+            onChange={handleSearchPost}
           />
         </div>
       </div>
@@ -160,7 +193,11 @@ const PostManage = () => {
                       <ActionView
                         onClick={() => navigate(`/${post.slug}`)}
                       ></ActionView>
-                      <ActionEdit></ActionEdit>
+                      <ActionEdit
+                        onClick={() =>
+                          navigate(`/manage/update-post?id=${post.id}`)
+                        }
+                      ></ActionEdit>
                       <ActionDelete
                         onClick={() => handleDeletePost(post.id)}
                       ></ActionDelete>
@@ -171,9 +208,13 @@ const PostManage = () => {
             })}
         </tbody>
       </Table>
-      <div className="mt-10 text-center">
-        <Button className="mx-auto w-[250px]">Load more</Button>
-      </div>
+      {total > postList.length && (
+        <div className="mt-10 text-center">
+          <Button onClick={handleLoadMorePost} className="mx-auto w-[250px]">
+            Load more
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
